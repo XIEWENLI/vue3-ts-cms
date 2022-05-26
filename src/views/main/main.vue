@@ -4,11 +4,7 @@
 </template>
 
 <script>
-export default {
-  setup() {
-    return {}
-  }
-}
+export default {}
 </script>
 
 <style scoped></style>
