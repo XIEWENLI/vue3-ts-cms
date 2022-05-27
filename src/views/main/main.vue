@@ -1,6 +1,5 @@
 <template>
-  <div>main</div>
-  <h1>{{ $store.state.name }}</h1>
+  <h1>main组件</h1>
 </template>
 
 <script>
