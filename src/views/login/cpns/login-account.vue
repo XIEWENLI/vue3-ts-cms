@@ -30,7 +30,7 @@ export default defineComponent({
 
     const formRef = ref<InstanceType<typeof ElForm>>()
 
-    // 判断form表单是否输入正确规则
+    // 判断form表单是否输入正确规则的方法
     const loginAction = () => {
       formRef.value?.validate((valid) => {
         if (valid) {
