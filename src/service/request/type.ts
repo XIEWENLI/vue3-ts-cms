@@ -1,14 +1,13 @@
-import { AxiosRequestConfig, AxiosResponse } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-interface XWLRequestInterceptors<T = AxiosResponse> {
-  requestInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig
-  requestInterceptorsCatch?: (err: any) => any
-  responseInterceptors?: (config: T) => T
-  responseInterceptorsCatch?: (err: any) => any
+export interface XWLRequestInterceptors<T = AxiosResponse> {
+  requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig
+  requestInterceptorCatch?: (err: any) => any
+  responseInterceptor?: (config: T) => T
+  responseInterceptorCatch?: (err: any) => any
 }
 
-interface XWLAxiosRequestConfig<T = AxiosResponse> extends AxiosRequestConfig {
+export interface XWLAxiosRequestConfig<T = AxiosResponse>
+  extends AxiosRequestConfig {
   interceptors?: XWLRequestInterceptors<T>
 }
-
-export { XWLRequestInterceptors, XWLAxiosRequestConfig }

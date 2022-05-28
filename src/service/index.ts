@@ -2,21 +2,26 @@
 import XWLRequest from './request'
 import { BASE_URL } from './request/config'
 
+import localCache from '@/utils/cache'
+
 const xwlRequest = new XWLRequest({
   baseURL: BASE_URL,
   interceptors: {
-    requestInterceptors: (config) => {
-      console.log('实例请求拦截！！！')
+    requestInterceptor: (config) => {
+      // 携带token的拦截
+      const token = localCache.getCache('token')
+      if (token) {
+        config.headers!.Authorization = `Bearer ${token}`
+      }
       return config
     },
-    requestInterceptorsCatch: (err) => {
+    requestInterceptorCatch: (err) => {
       return err
     },
-    responseInterceptors: (config) => {
-      console.log('实例响应拦截！！！')
-      return config
+    responseInterceptor: (config) => {
+      return config.data
     },
-    responseInterceptorsCatch: (err) => {
+    responseInterceptorCatch: (err) => {
       return err
     }
   }

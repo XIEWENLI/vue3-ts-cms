@@ -16,18 +16,17 @@ class XWLRequest {
 
     // 单独个实例的拦截器
     this.instance.interceptors.request.use(
-      this.interceptors?.requestInterceptors,
-      this.interceptors?.requestInterceptorsCatch
+      this.interceptors?.requestInterceptor,
+      this.interceptors?.requestInterceptorCatch
     )
     this.instance.interceptors.response.use(
-      this.interceptors?.responseInterceptors,
-      this.interceptors?.responseInterceptorsCatch
+      this.interceptors?.responseInterceptor,
+      this.interceptors?.responseInterceptorCatch
     )
 
     // 全部实例的拦截器
     this.instance.interceptors.request.use(
       (config) => {
-        console.log('全局请求拦截！！！')
         return config
       },
       (err) => {
@@ -36,7 +35,6 @@ class XWLRequest {
     )
     this.instance.interceptors.response.use(
       (config) => {
-        console.log('全局响应拦截！！！')
         return config
       },
       (err) => {
