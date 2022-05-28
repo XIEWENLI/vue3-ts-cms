@@ -2,21 +2,30 @@
 import XWLRequest from './request'
 import { BASE_URL } from './request/config'
 
+import localCache from '@/utils/cache'
+
 const xwlRequest = new XWLRequest({
   baseURL: BASE_URL,
   interceptors: {
-    requestInterceptors: (config) => {
-      console.log('实例请求拦截！！！')
+    requestInterceptor: (config) => {
+      // 携带token的拦截
+      const token = localCache.getCache('token')
+      if (token) {
+        // 解决请求拦截 headers 头提示为Object is possibly ‘undefined’
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`
+        }
+      }
       return config
     },
-    requestInterceptorsCatch: (err) => {
+    requestInterceptorCatch: (err) => {
       return err
     },
-    responseInterceptors: (config) => {
-      console.log('实例响应拦截！！！')
-      return config
+    responseInterceptor: (config) => {
+      return config.data
     },
-    responseInterceptorsCatch: (err) => {
+    responseInterceptorCatch: (err) => {
       return err
     }
   }

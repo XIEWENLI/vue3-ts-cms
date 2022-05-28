@@ -1,0 +1,79 @@
+import { Module } from 'vuex'
+
+import type { ILoginState } from './type'
+import type { IRootState } from '../type'
+import type { IAccount } from '@/service/login/type'
+
+import {
+  accountLoginRequest,
+  requestUserInfoById,
+  requestUserMenusByRoleId
+} from '@/service/login/login'
+
+import localCache from '@/utils/cache'
+import router from '@/router'
+
+// Module<ILoginState, IRootState>一个自己的state类型，另一个是根的state类型
+const loginModule: Module<ILoginState, IRootState> = {
+  namespaced: true,
+  state() {
+    return {
+      token: '',
+      userInfo: {},
+      userMenus: []
+    }
+  },
+  mutations: {
+    changeToken(state, token: string) {
+      state.token = token
+    },
+    changeUserInfo(state, userInfo: any) {
+      state.userInfo = userInfo
+    },
+    changeUserMenus(state, userMenus: any) {
+      state.userMenus = userMenus
+    }
+  },
+  actions: {
+    // 登录逻辑
+    async accountLoginAction({ commit }, payload: IAccount) {
+      const loginResult = await accountLoginRequest(payload)
+      const { id, token } = loginResult.data
+      commit('changeToken', token)
+      localCache.setCache('token', token)
+
+      // 获取用户信息
+      const userInfoResult = await requestUserInfoById(id)
+      const userInfo = userInfoResult.data
+      commit('changeUserInfo', userInfo)
+      localCache.setCache('userInfo', userInfo)
+
+      // 请求用户菜单
+      const userMenusResult = await requestUserMenusByRoleId(userInfo.role.id)
+      const userMenus = userMenusResult.data
+      commit('changeUserMenus', userMenus)
+      localCache.setCache('userMenus', userMenus)
+
+      // 跳到首页
+      router.push('/main')
+    },
+    // 用户刷新初始化vuex（localStorage->vuex）
+    loadLocalLogin({ commit }) {
+      console.log(123)
+      const token = localCache.getCache('token')
+      if (token) {
+        commit('changeToken', token)
+      }
+      const userInfo = localCache.getCache('userInfo')
+      if (userInfo) {
+        commit('changeUserInfo', userInfo)
+      }
+      const userMenus = localCache.getCache('userMenus')
+      if (userMenus) {
+        commit('changeUserMenus', userMenus)
+      }
+    }
+  }
+}
+
+export default loginModule
