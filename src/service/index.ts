@@ -11,7 +11,11 @@ const xwlRequest = new XWLRequest({
       // 携带token的拦截
       const token = localCache.getCache('token')
       if (token) {
-        config.headers!.Authorization = `Bearer ${token}`
+        // 解决请求拦截 headers 头提示为Object is possibly ‘undefined’
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${token}`
+        }
       }
       return config
     },
