@@ -35,31 +35,30 @@ const loginModule: Module<ILoginState, IRootState> = {
     }
   },
   actions: {
-    // 登录逻辑
     async accountLoginAction({ commit }, payload: IAccount) {
+      // 1、登录逻辑
       const loginResult = await accountLoginRequest(payload)
       const { id, token } = loginResult.data
       commit('changeToken', token)
       localCache.setCache('token', token)
 
-      // 获取用户信息
+      // 2、获取用户信息
       const userInfoResult = await requestUserInfoById(id)
       const userInfo = userInfoResult.data
       commit('changeUserInfo', userInfo)
       localCache.setCache('userInfo', userInfo)
 
-      // 请求用户菜单
+      // 3、请求用户菜单
       const userMenusResult = await requestUserMenusByRoleId(userInfo.role.id)
       const userMenus = userMenusResult.data
       commit('changeUserMenus', userMenus)
       localCache.setCache('userMenus', userMenus)
 
-      // 跳到首页
+      // 4、跳到首页
       router.push('/main')
     },
     // 用户刷新初始化vuex（localStorage->vuex）
     loadLocalLogin({ commit }) {
-      console.log(123)
       const token = localCache.getCache('token')
       if (token) {
         commit('changeToken', token)

@@ -9,11 +9,15 @@ import { setupStore } from './store'
 import 'normalize.css'
 import './assets/css/base.less'
 
+import { IconMenusApp } from '@/global'
+
 const app = createApp(App)
 
 app.use(router)
 app.use(store)
 // 用户刷新初始化vuex（localStorage->vuex）
 setupStore()
+// 图标icom
+app.use(IconMenusApp)
 
 app.mount('#app')
