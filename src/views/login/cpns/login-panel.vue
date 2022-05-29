@@ -76,7 +76,7 @@ export default defineComponent({
 <style scoped lang="less">
 .login-panel {
   width: 320px;
-  margin-bottom: 150px;
+  // margin-bottom: 150px;
 
   .login-title {
     text-align: center;
