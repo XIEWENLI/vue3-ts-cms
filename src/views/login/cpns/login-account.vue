@@ -2,7 +2,7 @@
   <div class="login-account">
     <el-form
       label-width="60px"
-      :rules="rules"
+      :rules="accountRules"
       :model="userAccount"
       ref="formRef"
     >
@@ -19,8 +19,8 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
-import { rules } from '../config/account-config'
-import { ElForm } from 'element-plus'
+import { accountRules } from '../config/account.config'
+import type { ElForm } from 'element-plus'
 
 import localCache from '@/utils/cache'
 
@@ -55,9 +55,9 @@ export default defineComponent({
 
     return {
       userAccount,
-      rules,
-      loginAction,
-      formRef
+      accountRules,
+      formRef,
+      loginAction
     }
   }
 })

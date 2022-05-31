@@ -1,6 +1,6 @@
 <template>
-  <div class="menu">
-    <h2>menu</h2>
+  <div class="not-found">
+    <h1>NOT FOUND</h1>
   </div>
 </template>
 

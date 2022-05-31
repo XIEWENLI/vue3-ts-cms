@@ -1,7 +1,26 @@
+// icon图标注册
 import { App } from 'vue'
-import { Monitor, Setting, Goods, ChatLineRound } from '@element-plus/icons-vue'
+import {
+  UserFilled,
+  Cellphone,
+  Monitor,
+  Setting,
+  Goods,
+  ChatLineRound,
+  Fold,
+  Expand
+} from '@element-plus/icons-vue'
 
-const components = [Monitor, Setting, Goods, ChatLineRound]
+const components = [
+  UserFilled,
+  Cellphone,
+  Monitor,
+  Setting,
+  Goods,
+  ChatLineRound,
+  Fold,
+  Expand
+]
 
 export function IconMenusApp(app: App): void {
   for (const component of components) {

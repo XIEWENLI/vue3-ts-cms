@@ -5,7 +5,7 @@
       <span v-if="!collapse" class="title">Vue3+TS</span>
     </div>
     <el-menu
-      default-active="2"
+      :default-active="defaultActive"
       class="el-menu-vertical"
       :collapse="collapse"
       background-color="#0c2135"
@@ -27,7 +27,10 @@
             </template>
             <!-- 遍历里面的item -->
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item :index="subitem.id + ''">
+              <el-menu-item
+                :index="subitem.id + ''"
+                @click="jumpRouter(subitem)"
+              >
                 <component
                   class="icon"
                   v-if="subitem.icon"
@@ -55,8 +58,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '@/store'
+import { pathToMenu } from '@/utils/map-menu'
 
 export default defineComponent({
   props: {
@@ -67,9 +72,11 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
 
+    // 从userMenus取出icon名（格式：el-xxx）,转成Xxx变成组件名
     const userMenus = computed(() => store.state.loginModule.userMenus)
-
     for (const menu of userMenus.value) {
       let icon = menu.icon.split('-').slice(2)
       let i = ''
@@ -83,8 +90,21 @@ export default defineComponent({
       }
     }
 
+    // 路由页面跳转
+    const jumpRouter = (subitem: any) => {
+      router.push({ path: subitem.url ?? '/not-found' })
+    }
+
+    // 刷新当前路由不变
+    const activePath = route.path
+    const menu = pathToMenu(userMenus.value, activePath)
+    //选中的menu选项
+    const defaultActive = ref(menu.id + '')
+
     return {
-      userMenus
+      userMenus,
+      defaultActive,
+      jumpRouter
     }
   }
 })

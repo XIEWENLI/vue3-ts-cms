@@ -1,4 +1,4 @@
-export const rules = {
+export const accountRules = {
   username: [
     { required: true, message: '用户名是必传内容~', trigger: 'blur' },
     {

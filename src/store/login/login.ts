@@ -12,6 +12,7 @@ import {
 
 import localCache from '@/utils/cache'
 import router from '@/router'
+import { mapMenus } from '@/utils/map-menu'
 
 // Module<ILoginState, IRootState>一个自己的state类型，另一个是根的state类型
 const loginModule: Module<ILoginState, IRootState> = {
@@ -32,6 +33,12 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeUserMenus(state, userMenus: any) {
       state.userMenus = userMenus
+
+      // 获取routes[]映射,动态注册路由
+      const routes = mapMenus(userMenus)
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   },
   actions: {
