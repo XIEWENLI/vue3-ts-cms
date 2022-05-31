@@ -1,4 +1,4 @@
-import BreadCreumb from './src/breadcreumb.vue'
+import BreadCreumb from '@/base-ui/breadcreumb/src/breadcrumb.vue'
 
 export * from './types'
 
