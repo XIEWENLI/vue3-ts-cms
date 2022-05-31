@@ -6,11 +6,7 @@
     </i>
 
     <div class="content">
-      <el-breadcrumb separator="/">
-        <template v-for="item in breadcrumbs" :key="item.name">
-          <el-breadcrumb-item>{{ item.name }}</el-breadcrumb-item>
-        </template>
-      </el-breadcrumb>
+      <bread-crunmb :breadcrumbs="breadcrumbs" />
       <user-info />
     </div>
   </div>
@@ -22,11 +18,13 @@ import { useRoute } from 'vue-router'
 import UserInfo from './user-info.vue'
 import { pathMapBreadCrumb } from '@/utils/map-menu'
 import { useStore } from '@/store'
+import BreadCrunmb from '@/base-ui/breadcreumb'
 
 export default defineComponent({
   emits: ['foldChange'],
   components: {
-    UserInfo
+    UserInfo,
+    BreadCrunmb
   },
   setup(props, { emit }) {
     // 是否隐藏
@@ -47,8 +45,8 @@ export default defineComponent({
 
     return {
       isFold,
-      handleFoldClick,
-      breadcrumbs
+      breadcrumbs,
+      handleFoldClick
     }
   }
 })
