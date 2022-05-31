@@ -1,18 +1,29 @@
 <template>
   <div class="user">
-    <h2>user</h2>
+    <XWLForm v-bind="searchFormConfig" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import XWLForm from '@/base-ui/form'
+import { searchFormConfig } from './config/search.config'
 
 export default defineComponent({
   name: 'user',
+  components: {
+    XWLForm
+  },
   setup() {
-    return {}
+    return {
+      searchFormConfig
+    }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.user {
+  background: #fff;
+}
+</style>

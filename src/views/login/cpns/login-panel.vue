@@ -33,15 +33,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { UserFilled, Cellphone } from '@element-plus/icons-vue'
 
 import LoginAccount from './login-account.vue'
 import LoginPhone from './login-phone.vue'
 
 export default defineComponent({
   components: {
-    UserFilled,
-    Cellphone,
     LoginAccount,
     LoginPhone
   },

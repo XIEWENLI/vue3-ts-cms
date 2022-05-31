@@ -1,7 +1,5 @@
 <template>
-  <div class="menu">
-    <h2>menu</h2>
-  </div>
+  <div>面包屑</div>
 </template>
 
 <script lang="ts">

@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 import localCache from '@/utils/cache'
+import { fistRoute } from '@/utils/map-menu'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -10,11 +11,18 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/views/login/login.vue')
   },
   {
     path: '/main',
+    name: 'main',
     component: () => import('@/views/main/main.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/not-found/not-found.vue')
   }
 ]
 
@@ -29,6 +37,11 @@ router.beforeEach((to) => {
     if (!token) {
       return '/login'
     }
+  }
+
+  // 一开始显示界面
+  if (to.path === '/main') {
+    return fistRoute.url
   }
 })
 

@@ -13,10 +13,15 @@ import { IconMenusApp } from '@/global'
 
 const app = createApp(App)
 
+// 用户刷新初始化vuex（localStorage->vuex）
+/* setupStore()要放在app.use(router)的前面，
+因为开始注册的路由时 p1->comp1，
+后面动态路由注册时输入有 p1->comp2，
+但是第一个生效*/
+setupStore()
 app.use(router)
 app.use(store)
-// 用户刷新初始化vuex（localStorage->vuex）
-setupStore()
+
 // 图标icom
 app.use(IconMenusApp)
 
