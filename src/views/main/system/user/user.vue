@@ -4,15 +4,43 @@
     <page-search :searchFormConfig="searchFormConfig" />
     <!-- table组件 -->
     <div class="content">
-      <XWLTable :propList="propList" :tableData="userList">
+      <XWLTable
+        :title="title"
+        :propList="propList"
+        :tableData="userList"
+        :showIndexColumn="showIndexColumn"
+        :showSelectColumn="showSelectColumn"
+        @handleSelectData="handleSelectData"
+      >
+        <!-- header插槽 -->
+        <template #headerHandler>
+          <el-button type="primary">创建用户</el-button>
+        </template>
+        <!-- table列插槽 -->
         <template #status="scope">
-          <el-button>{{ scope.row ? '启用' : '禁用' }}</el-button>
+          <el-button
+            plain
+            size="small"
+            :type="scope.row.enable ? 'success' : 'danger'"
+          >
+            {{ scope.row ? '启用' : '禁用' }}
+          </el-button>
         </template>
         <template #createAt="scope">
-          {{ scope.row.createAt }}
+          {{ $filters.formatTime(scope.row.createAt) }}
         </template>
         <template #updateAt="scope">
-          {{ scope.row.updateAt }}
+          {{ $filters.formatTime(scope.row.updateAt) }}
+        </template>
+        <template #handle>
+          <div>
+            <el-button size="small" link type="primary"
+              ><el-icon><EditPen /></el-icon>编辑</el-button
+            >
+            <el-button size="small" link type="danger"
+              ><el-icon><Delete /></el-icon>删除</el-button
+            >
+          </div>
         </template>
       </XWLTable>
     </div>
@@ -20,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useStore } from '@/store'
 // form表单配置文件
 import { searchFormConfig } from './config/search.config'
@@ -51,10 +79,28 @@ export default defineComponent({
     const userList = computed(() => store.state.systemModule.userList)
     // const userCount = computed(() => store.state.systemModule.userCount)
 
+    const title = ref('用户列表')
+
+    // 是否显示序号(默认为false，不显示)
+    const showIndexColumn = true
+
+    // 多选框列(默认为false，不显示)
+    const showSelectColumn = true
+    // emit获取table多选框选中的数据
+    let selectData = ref(null)
+    const handleSelectData = (val: any) => {
+      selectData = val
+    }
+
     return {
       searchFormConfig,
       userList,
-      propList
+      title,
+      propList,
+      showIndexColumn,
+      showSelectColumn,
+      selectData,
+      handleSelectData
     }
   }
 })

@@ -1,6 +1,32 @@
 <template>
   <div class="table">
-    <el-table :data="tableData" :border="true" style="width: 100%">
+    <div class="header">
+      <slot name="header">
+        <div class="title">{{ title }}</div>
+        <div class="handler">
+          <slot name="headerHandler"></slot>
+        </div>
+      </slot>
+    </div>
+    <el-table
+      :data="tableData"
+      :border="true"
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+        v-if="showSelectColumn"
+        type="selection"
+        align="center"
+        width="50px"
+      ></el-table-column>
+      <el-table-column
+        v-if="showIndexColumn"
+        label="序号"
+        type="index"
+        align="center"
+        width="60px"
+      ></el-table-column>
       <template v-for="item in propList" :key="item.prop">
         <el-table-column
           :prop="item.prop"
@@ -18,14 +44,34 @@
         </el-table-column>
       </template>
     </el-table>
+    <div class="footer">
+      <slot name="footer">
+        <el-pagination
+          v-model:currentPage="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[100, 200, 300, 400]"
+          :small="small"
+          :disabled="disabled"
+          :background="background"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </slot>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   props: {
+    title: {
+      type: String,
+      default: ''
+    },
     tableData: {
       type: Object,
       required: true
@@ -33,12 +79,72 @@ export default defineComponent({
     propList: {
       type: Object,
       required: true
+    },
+    showIndexColumn: {
+      type: Boolean,
+      default: false
+    },
+    showSelectColumn: {
+      type: Boolean,
+      default: false
     }
   },
-  setup() {
-    return {}
+  setup(props, { emit }) {
+    // select选中的传值给users.vue
+    const handleSelectionChange = (val: any) => {
+      emit('handleSelectData', val)
+    }
+
+    // 分页
+    const currentPage = ref(4)
+    const pageSize = ref(100)
+    const small = ref(false)
+    const disabled = ref(false)
+    const background = ref(false)
+    const handleSizeChange = (val: number) => {
+      console.log(`${val} items per page`)
+    }
+    const handleCurrentChange = (val: number) => {
+      console.log(`current page: ${val}`)
+    }
+
+    return {
+      currentPage,
+      pageSize,
+      small,
+      disabled,
+      background,
+      handleSizeChange,
+      handleCurrentChange,
+      handleSelectionChange
+    }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.header {
+  display: flex;
+  height: 45px;
+  padding: 0 5px;
+  justify-content: space-between;
+  align-items: center;
+
+  .title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .handler {
+    align-items: center;
+  }
+}
+
+.footer {
+  margin-top: 15px;
+
+  .el-pagination {
+    text-align: right;
+  }
+}
+</style>

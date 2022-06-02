@@ -8,7 +8,9 @@ import {
   Goods,
   ChatLineRound,
   Fold,
-  Expand
+  Expand,
+  EditPen,
+  Delete
 } from '@element-plus/icons-vue'
 
 const components = [
@@ -19,10 +21,12 @@ const components = [
   Goods,
   ChatLineRound,
   Fold,
-  Expand
+  Expand,
+  EditPen,
+  Delete
 ]
 
-export function IconMenusApp(app: App): void {
+export default function IconMenusApp(app: App): void {
   for (const component of components) {
     app.component(component.name, component)
   }
