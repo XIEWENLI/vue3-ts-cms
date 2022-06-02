@@ -11,27 +11,27 @@ export const searchFormConfig: IForm = {
   },
   forms: [
     {
-      id: 1,
+      field: 'id',
       type: 'input',
       label: 'ID',
       placeholder: '请输入ID'
     },
     {
-      id: 2,
+      field: 'name',
       type: 'input',
       label: '用户名',
       placeholder: '请输入用户名'
     },
     {
-      id: 3,
+      field: 'password',
       type: 'password',
       label: '密码',
       placeholder: '请输入密码'
     },
     {
-      id: 4,
+      field: 'sport',
       type: 'select',
-      label: '选择',
+      label: '运动',
       options: [
         {
           id: '41',
@@ -48,7 +48,7 @@ export const searchFormConfig: IForm = {
       ]
     },
     {
-      id: 5,
+      field: 'createDate',
       type: 'daterange',
       label: '创建日期',
       otherOptions: {

@@ -9,7 +9,7 @@ interface IResponsiveLayout {
 }
 
 export interface IFormItem {
-  id: number
+  field: string
   type: IFormInputType
   label: string
   placeholder?: any

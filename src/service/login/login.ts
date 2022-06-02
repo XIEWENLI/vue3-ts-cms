@@ -1,4 +1,4 @@
-import xwlRequest from '@/service/index'
+import xwlRequest from '@/service'
 
 import { IAccount, IDataType, ILoginResult } from './type'
 
