@@ -52,8 +52,8 @@ export const searchFormConfig: IForm = {
       type: 'daterange',
       label: '创建日期',
       otherOptions: {
-        'start-placeholder': 'Start date',
-        'end-placeholder': 'End date'
+        'start-placeholder': '开始时间',
+        'end-placeholder': '结束时间'
       }
     }
   ]

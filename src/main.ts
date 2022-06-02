@@ -9,7 +9,7 @@ import { setupStore } from './store'
 import 'normalize.css'
 import './assets/css/base.less'
 
-import { IconMenusApp } from '@/global'
+import globalRegister from '@/global'
 
 const app = createApp(App)
 
@@ -22,7 +22,7 @@ setupStore()
 app.use(router)
 app.use(store)
 
-// 图标icom
-app.use(IconMenusApp)
+// 全局注册
+app.use(globalRegister)
 
 app.mount('#app')
