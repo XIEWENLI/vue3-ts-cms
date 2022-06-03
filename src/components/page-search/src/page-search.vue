@@ -7,7 +7,7 @@
       </template>
       <template #footer>
         <div class="footer">
-          <el-button>重置</el-button>
+          <el-button @click="handleResetOnclick">重置</el-button>
           <el-button type="primary">搜索</el-button>
         </div>
       </template>
@@ -27,17 +27,26 @@ export default defineComponent({
     }
   },
   components: { XWLForm },
-  setup() {
+  setup(props) {
+    const forms = props.searchFormConfig?.forms ?? []
+    const formsField: any = {}
+    for (const item of forms) {
+      formsField[item.field] = ''
+    }
+
     // 组件的v-model使用reactive使用有问题
-    const formData = ref({
-      id: '',
-      name: '',
-      password: '',
-      sport: '',
-      createDate: ''
-    })
+    // 根据不同页面获取高级检索的搜索条件
+    const formData = ref(formsField)
+
+    const handleResetOnclick = () => {
+      for (const key in formsField) {
+        formData.value[key] = ''
+      }
+    }
+
     return {
-      formData
+      formData,
+      handleResetOnclick
     }
   }
 })

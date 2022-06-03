@@ -92,7 +92,6 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-    // select选中的传值给users.vue
     const handleSelectionChange = (val: any) => {
       emit('handleSelectData', val)
     }
