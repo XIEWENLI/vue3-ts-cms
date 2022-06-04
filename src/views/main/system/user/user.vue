@@ -1,9 +1,17 @@
 <template>
   <div class="user">
     <!-- 高级检索组件 -->
-    <page-search :searchFormConfig="searchFormConfig" />
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetClick="handleResetOnclick"
+      @searchClick="handleSearchClick"
+    />
     <!-- table组件 -->
-    <page-content :propList="propList" pageName="user"></page-content>
+    <page-content
+      :propList="propList"
+      pageName="user"
+      ref="pageContentRef"
+    ></page-content>
   </div>
 </template>
 
@@ -18,6 +26,9 @@ import { searchFormConfig } from './config/search.config'
 // table表单的配置文件
 import { propList } from './config/table.config'
 
+// hook
+import { usePageSearch } from '@/hooks/user-page-search'
+
 export default defineComponent({
   name: 'user',
   components: {
@@ -25,9 +36,16 @@ export default defineComponent({
     PageContent
   },
   setup() {
+    // 重置和搜索事件
+    const { pageContentRef, handleResetOnclick, handleSearchClick } =
+      usePageSearch()
+
     return {
       searchFormConfig,
-      propList
+      propList,
+      pageContentRef,
+      handleResetOnclick,
+      handleSearchClick
     }
   }
 })

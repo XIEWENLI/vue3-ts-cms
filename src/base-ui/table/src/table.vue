@@ -46,20 +46,18 @@
     </el-table>
     <div class="footer">
       <slot name="footer">
-        <div class="footerPagination">
-          <el-pagination
-            v-model:currentPage="currentPage"
-            v-model:page-size="pageSize"
-            :page-sizes="[100, 200, 300, 400]"
-            :small="small"
-            :disabled="disabled"
-            :background="background"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
-        </div>
+        <el-pagination
+          v-model:currentPage="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[100, 200, 300, 400]"
+          :small="small"
+          :disabled="disabled"
+          :background="background"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageListCount"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </slot>
     </div>
   </div>
@@ -81,6 +79,10 @@ export default defineComponent({
     propList: {
       type: Object,
       required: true
+    },
+    pageListCount: {
+      type: Number,
+      reuired: true
     },
     showIndexColumn: {
       type: Boolean,
@@ -143,18 +145,7 @@ export default defineComponent({
 
 .footer {
   margin-top: 15px;
-
-  // 设置分页布局靠右显示
-  // 1、先定义主轴右->左，使分页（el-pagination）靠右边
-  .footerPagination {
-    display: flex;
-    flex-direction: row-reverse;
-    // 2、然后定义主轴左->右，使分页（el-pagination）的子元素不继承父元素的display设置，正常显示
-    .el-pagination {
-      text-align: right;
-      display: flex;
-      flex-direction: row;
-    }
-  }
+  display: flex;
+  flex-direction: row-reverse;
 }
 </style>

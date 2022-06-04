@@ -4,6 +4,7 @@
       :title="title"
       :propList="propList"
       :tableData="pageListData"
+      :pageListCount="pageListCount"
       :showIndexColumn="showIndexColumn"
       :showSelectColumn="showSelectColumn"
       @handleSelectData="handleSelectData"
@@ -65,19 +66,28 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    // 获取table列表数据,保存到vuex
-    store.dispatch('systemModule/getPageListAction', {
-      pageName: `${props.pageName}`,
-      queryInfo: {
-        offset: 0,
-        size: 10
-      }
-    })
+    // 使用vuex，获取table列表数据,
+    const getPageData = (queryInfo: any = {}) => {
+      store.dispatch('systemModule/getPageListAction', {
+        pageName: `${props.pageName}`,
+        queryInfo: {
+          offset: 0,
+          size: 10,
+          ...queryInfo
+        }
+      })
+    }
+    getPageData()
 
+    // 列表数据
     const pageListData = computed(() =>
       store.getters['systemModule/pageListData'](props.pageName)
     )
-    // const userCount = computed(() => store.state.systemModule.userCount)
+
+    // 总条数
+    const pageListCount = computed(() =>
+      store.getters['systemModule/pageListCount'](props.pageName)
+    )
 
     const title = ref('用户列表')
 
@@ -94,11 +104,13 @@ export default defineComponent({
 
     return {
       pageListData,
+      pageListCount,
       title,
       showIndexColumn,
       showSelectColumn,
       selectData,
-      handleSelectData
+      handleSelectData,
+      getPageData
     }
   }
 })
