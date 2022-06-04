@@ -23,9 +23,9 @@
                 >
                   <el-option
                     v-for="op in form.options"
-                    :key="op.id"
-                    :label="op.val"
-                    :value="op.val"
+                    :key="op.title"
+                    :label="op.value"
+                    :value="op.value"
                   />
                 </el-select>
               </template>
@@ -79,9 +79,9 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    // form表单的值
     // 组件的v-model使用reactive使用有问题
     const formData = ref({ ...props.modelValue })
+
     watch(
       formData,
       (newVal) => {
