@@ -12,6 +12,8 @@ export function mapMenus(userMenus: any[]): RouteRecordRaw[] {
   const allRoutes: RouteRecordRaw[] = [] //所有的映射routes
   const routeFiles = require.context('../router/main', true, /\.ts/)
   routeFiles.keys().forEach((key) => {
+    // key：ts文件的相对路径（比如：./analysis/dashboard/dashboard.ts ）
+    //key.split('.')[1]： /analysis/dashboard/dashboard.ts
     const route = require('../router/main' + key.split('.')[1])
     allRoutes.push(route.default)
   })
@@ -65,4 +67,22 @@ export function pathToMenu(
       return menu
     }
   }
+}
+
+// 按钮权限
+export function mapMenusToPermissions(userMenus: any[]) {
+  const permissions: string[] = []
+
+  const _recurseGetPermission = (menus: any[]) => {
+    for (const menu of menus) {
+      if (menu.type === 1 || menu.type === 2) {
+        _recurseGetPermission(menu.children ?? [])
+      } else if (menu.type === 3) {
+        permissions.push(menu.permission)
+      }
+    }
+  }
+  _recurseGetPermission(userMenus)
+
+  return permissions
 }

@@ -19,7 +19,7 @@ import { searchFormConfig } from './config/search.config'
 import { propList } from './config/table.config'
 
 export default defineComponent({
-  name: 'user',
+  name: 'role',
   components: {
     PageSearch,
     PageContent

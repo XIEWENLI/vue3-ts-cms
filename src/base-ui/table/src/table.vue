@@ -13,18 +13,19 @@
       :border="true"
       style="width: 100%"
       @selection-change="handleSelectionChange"
+      v-bind="childrenProps"
     >
       <el-table-column
-        v-if="showSelectColumn"
+        v-if="showSelectColumn && showFooter"
         type="selection"
-        align="center"
+        :align="'center'"
         width="50px"
       ></el-table-column>
       <el-table-column
-        v-if="showIndexColumn"
+        v-if="showIndexColumn && showFooter"
         label="序号"
         type="index"
-        align="center"
+        :align="'center'"
         width="60px"
       ></el-table-column>
       <template v-for="item in propList" :key="item.prop">
@@ -32,7 +33,8 @@
           :prop="item.prop"
           :label="item.label"
           :min-width="item.minWidth + ''"
-          align="center"
+          :align="'center'"
+          show-overflow-tooltip
         >
           <!-- <template #default="scope">是table内部组件的插槽 -->
           <template #default="scope">
@@ -44,15 +46,15 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="showFooter">
       <slot name="footer">
+        <!-- current-page:当前页数；
+             page-size:每页显示条目个数；
+             page-sizes:每页显示个数选择器的选项设置 -->
         <el-pagination
-          v-model:currentPage="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[100, 200, 300, 400]"
-          :small="small"
-          :disabled="disabled"
-          :background="background"
+          :currentPage="page.currentPage"
+          :page-size="page.pageSize"
+          :page-sizes="[10, 20, 30]"
           layout="total, sizes, prev, pager, next, jumper"
           :total="pageListCount"
           @size-change="handleSizeChange"
@@ -64,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
@@ -91,32 +93,35 @@ export default defineComponent({
     showSelectColumn: {
       type: Boolean,
       default: false
+    },
+    page: {
+      type: Object,
+      default: () => ({ currentPage: 1, pageSize: 10 })
+    },
+    childrenProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
+  emits: ['handleSelectData', 'update:page'],
   setup(props, { emit }) {
     const handleSelectionChange = (val: any) => {
       emit('handleSelectData', val)
     }
 
     // 分页
-    const currentPage = ref(4)
-    const pageSize = ref(100)
-    const small = ref(false)
-    const disabled = ref(false)
-    const background = ref(false)
-    const handleSizeChange = (val: number) => {
-      console.log(`${val} items per page`)
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:page', { ...props.page, pageSize })
     }
-    const handleCurrentChange = (val: number) => {
-      console.log(`current page: ${val}`)
+    const handleCurrentChange = (currentPage: number) => {
+      emit('update:page', { ...props.page, currentPage })
     }
 
     return {
-      currentPage,
-      pageSize,
-      small,
-      disabled,
-      background,
       handleSizeChange,
       handleCurrentChange,
       handleSelectionChange

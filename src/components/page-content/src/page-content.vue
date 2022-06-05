@@ -1,6 +1,7 @@
 <template>
   <div class="page-content">
     <XWLTable
+      v-model:page="pageInfo"
       :title="title"
       :propList="propList"
       :tableData="pageListData"
@@ -8,10 +9,12 @@
       :showIndexColumn="showIndexColumn"
       :showSelectColumn="showSelectColumn"
       @handleSelectData="handleSelectData"
+      :childrenProps="childrenProps"
+      :showFooter="showFooter"
     >
       <!-- header插槽 -->
       <template #headerHandler>
-        <el-button type="primary">创建用户</el-button>
+        <el-button type="primary" v-if="isCreate">创建用户</el-button>
       </template>
       <!-- table列插槽 -->
       <template #status="scope">
@@ -29,25 +32,38 @@
       <template #updateAt="scope">
         {{ $filters.formatTime(scope.row.updateAt) }}
       </template>
-      <template #handle>
+      <template #handler>
         <div>
-          <el-button size="small" link type="primary"
+          <el-button size="small" link type="primary" v-if="isUpdate"
             ><el-icon><EditPen /></el-icon>编辑</el-button
           >
-          <el-button size="small" link type="danger"
+          <el-button size="small" link type="danger" v-if="isDelete"
             ><el-icon><Delete /></el-icon>删除</el-button
           >
         </div>
+      </template>
+
+      <!-- 其它插槽,根据每个组件而定 -->
+      <template
+        v-for="item in otherSlots"
+        :key="item.slotName"
+        #[item.slotName]="scope"
+      >
+        <template v-if="item.slotName">
+          <slot :name="item.slotName" :row="scope.row"></slot>
+        </template>
       </template>
     </XWLTable>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import { useStore } from '@/store'
 
 import XWLTable from '@/base-ui/table'
+
+import { usePermission } from '@/hooks/use-permission'
 
 export default defineComponent({
   props: {
@@ -58,6 +74,14 @@ export default defineComponent({
     propList: {
       type: Array,
       required: true
+    },
+    childrenProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
@@ -66,13 +90,24 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
+    // 获取操作的权限
+    const isCreate = usePermission(props.pageName, 'create')
+    const isUpdate = usePermission(props.pageName, 'update')
+    const isDelete = usePermission(props.pageName, 'delete')
+    const isQuery = usePermission(props.pageName, 'query')
+
+    // 双向绑定pageInfo
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
+    watch(pageInfo, () => getPageData())
+
     // 使用vuex，获取table列表数据,
     const getPageData = (queryInfo: any = {}) => {
+      if (!isQuery) return
       store.dispatch('systemModule/getPageListAction', {
         pageName: `${props.pageName}`,
         queryInfo: {
-          offset: 0,
-          size: 10,
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
           ...queryInfo
         }
       })
@@ -102,6 +137,15 @@ export default defineComponent({
       selectData = val
     }
 
+    // 获取其它插槽
+    const otherSlots = (props.propList as any).filter((item: any) => {
+      if (item.slotName === 'status') return false
+      if (item.slotName === 'createAt') return false
+      if (item.slotName === 'updateAt') return false
+      if (item.slotName === 'handler') return false
+      return true
+    })
+
     return {
       pageListData,
       pageListCount,
@@ -109,6 +153,11 @@ export default defineComponent({
       showIndexColumn,
       showSelectColumn,
       selectData,
+      pageInfo,
+      otherSlots,
+      isCreate,
+      isUpdate,
+      isDelete,
       handleSelectData,
       getPageData
     }
