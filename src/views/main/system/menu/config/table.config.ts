@@ -1,7 +1,10 @@
 // table每列属性的数据
 export const propList = [
-  { prop: 'name', label: '角色名', minWidth: '100' },
-  { prop: 'intro', label: '权限介绍', minWidth: '100' },
+  { prop: 'name', label: '菜单名称', minWidth: '100' },
+  { prop: 'type', label: '类型', minWidth: '60' },
+  { prop: 'url', label: '菜单url', minWidth: '120' },
+  { prop: 'icon', label: '菜单icon', minWidth: '120' },
+  { prop: 'permission', label: '按钮权限', minWidth: '100' },
   {
     prop: 'createAt',
     label: '创建事件',

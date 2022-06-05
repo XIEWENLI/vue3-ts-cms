@@ -19,6 +19,6 @@ export const propList = [
   {
     label: '操作',
     minWidth: '100',
-    slotName: 'handle'
+    slotName: 'handler'
   }
 ]
