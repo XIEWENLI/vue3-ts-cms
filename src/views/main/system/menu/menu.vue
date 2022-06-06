@@ -25,10 +25,8 @@ export default defineComponent({
   },
   setup() {
     const childrenProps = {
-      rowKey: 'id',
-      treeProp: {
-        children: 'children'
-      }
+      // 数据本身就有children属性，所以不需要tree-props。（table树形数据有两种方式）
+      rowKey: 'id'
     }
 
     // 是否显示footer

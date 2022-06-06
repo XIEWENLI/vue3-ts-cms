@@ -14,7 +14,9 @@
     >
       <!-- header插槽 -->
       <template #headerHandler>
-        <el-button type="primary" v-if="isCreate">创建用户</el-button>
+        <el-button type="primary" v-if="isCreate" @click="handlerCreateClick"
+          >创建用户</el-button
+        >
       </template>
       <!-- table列插槽 -->
       <template #status="scope">
@@ -32,12 +34,22 @@
       <template #updateAt="scope">
         {{ $filters.formatTime(scope.row.updateAt) }}
       </template>
-      <template #handler>
+      <template #handler="scope">
         <div>
-          <el-button size="small" link type="primary" v-if="isUpdate"
+          <el-button
+            size="small"
+            link
+            type="primary"
+            v-if="isUpdate"
+            @click="handlerEditClick(scope.row)"
             ><el-icon><EditPen /></el-icon>编辑</el-button
           >
-          <el-button size="small" link type="danger" v-if="isDelete"
+          <el-button
+            size="small"
+            link
+            type="danger"
+            v-if="isDelete"
+            @click="handleDeleteClick(scope.row)"
             ><el-icon><Delete /></el-icon>删除</el-button
           >
         </div>
@@ -87,7 +99,8 @@ export default defineComponent({
   components: {
     XWLTable
   },
-  setup(props) {
+  emits: ['modalEditClick', 'modalCreateClick'],
+  setup(props, { emit }) {
     const store = useStore()
 
     // 获取操作的权限
@@ -146,6 +159,22 @@ export default defineComponent({
       return true
     })
 
+    // 删除/编辑/新建操作
+    const handleDeleteClick = (item: any) => {
+      store.dispatch('systemModule/deletePageDataAction', {
+        pageName: props.pageName,
+        id: item.id
+      })
+    }
+
+    const handlerEditClick = (item: any) => {
+      emit('modalEditClick', item)
+    }
+
+    const handlerCreateClick = () => {
+      emit('modalCreateClick')
+    }
+
     return {
       pageListData,
       pageListCount,
@@ -159,7 +188,10 @@ export default defineComponent({
       isUpdate,
       isDelete,
       handleSelectData,
-      getPageData
+      getPageData,
+      handleDeleteClick,
+      handlerCreateClick,
+      handlerEditClick
     }
   }
 })
