@@ -1,11 +1,11 @@
 type IFormInputType = 'input' | 'password' | 'select' | 'daterange'
 
 interface IResponsiveLayout {
-  xl: number
-  lg: number
-  md: number
-  sm: number
-  xs: number
+  xl?: number
+  lg?: number
+  md?: number
+  sm?: number
+  xs?: number
 }
 
 export interface IFormItem {
@@ -21,6 +21,7 @@ export interface IFormItem {
 
 export interface IForm {
   labelWidth: string
+  st?: string
   responsiveLayout: IResponsiveLayout
   forms: IFormItem[]
 }

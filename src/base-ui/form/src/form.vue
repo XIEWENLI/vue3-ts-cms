@@ -4,7 +4,7 @@
     <el-form :label-width="labelWidth">
       <el-row>
         <template v-for="form in forms" :key="form.label">
-          <el-col v-bind="responsiveLayout" class="form-col">
+          <el-col v-bind="responsiveLayout" class="form-col" :style="st">
             <el-form-item :label="form.label">
               <template
                 v-if="form.type === 'input' || form.type === 'password'"
@@ -61,6 +61,9 @@ export default defineComponent({
     labelWidth: {
       type: String,
       default: '80px'
+    },
+    st: {
+      type: String
     },
     responsiveLayout: {
       type: Object,
