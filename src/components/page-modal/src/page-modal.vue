@@ -9,7 +9,7 @@
       center
     >
       <XWLForm v-bind="searchModalFormConfig" v-model="formData"></XWLForm>
-
+      <slot></slot>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="handleDialogClickCancel">取消</el-button>
@@ -40,6 +40,10 @@ export default defineComponent({
       required: true
     },
     defaultInfo: {
+      type: Object,
+      default: () => ({})
+    },
+    otherInfo: {
       type: Object,
       default: () => ({})
     },
@@ -74,7 +78,7 @@ export default defineComponent({
         console.log('编辑用户')
         store.dispatch('systemModule/editPageDataAction', {
           pageName: props.pageName,
-          editData: { ...formData.value },
+          editData: { ...formData.value, ...props.otherInfo },
           id: props.defaultInfo.id
         })
       } else {
@@ -82,7 +86,7 @@ export default defineComponent({
         console.log('新建用户')
         store.dispatch('systemModule/createPageDataAction', {
           pageName: props.pageName,
-          newData: { ...formData.value }
+          newData: { ...formData.value, ...props.otherInfo }
         })
       }
     }
