@@ -74,8 +74,11 @@ export default defineComponent({
       usePageSearch()
 
     // modal
+
+    // 编辑权限时回显
     const elTreeRef = ref<InstanceType<typeof ElTree>>()
     const editCallback = (item: any) => {
+      console.log(item)
       const leafKeys = menuMapLeafKeys(item.menuList)
       nextTick(() => {
         console.log(elTreeRef.value)
@@ -86,6 +89,7 @@ export default defineComponent({
     const { pageModalRef, modalCreateClick, modalEditClick, defaultInfo } =
       usePageModal(undefined, editCallback)
 
+    // 权限menus
     const store = useStore()
     const menus = computed(() => store.state.entireMenu)
 
