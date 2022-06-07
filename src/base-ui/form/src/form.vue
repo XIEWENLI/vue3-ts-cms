@@ -5,7 +5,7 @@
       <el-row>
         <template v-for="form in forms" :key="form.label">
           <el-col v-bind="responsiveLayout" class="form-col" :style="st">
-            <el-form-item :label="form.label">
+            <el-form-item :label="form.label" v-if="!form.isHidden">
               <template
                 v-if="form.type === 'input' || form.type === 'password'"
               >

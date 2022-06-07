@@ -19,14 +19,15 @@
     <!-- modal组件 -->
     <page-modal
       ref="pageModalRef"
-      :searchModalFormConfig="searchModalFormConfig"
+      :searchModalFormConfig="searchModalFormConfigRef"
       :defaultInfo="defaultInfo"
+      pageName="user"
     ></page-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 
 import PageSearch from '@/components/page-search'
 import PageContent from '@/components/page-content'
@@ -43,6 +44,8 @@ import { searchModalFormConfig } from './config/modal.config'
 import { usePageSearch } from '@/hooks/user-page-search'
 import { usePageModal } from '@/hooks/use-page-modal'
 
+import { useStore } from '@/store'
+
 export default defineComponent({
   name: 'user',
   components: {
@@ -56,16 +59,53 @@ export default defineComponent({
       usePageSearch()
 
     // modal
+    const newCallback = () => {
+      const passwordItem = searchModalFormConfig.forms.find(
+        (item) => item.field === 'password'
+      )
+      if (passwordItem) passwordItem.isHidden = false
+    }
+    const editCallback = () => {
+      const passwordItem = searchModalFormConfig.forms.find(
+        (item) => item.field === 'password'
+      )
+      if (passwordItem) passwordItem.isHidden = true
+    }
+
+    // 动态添加部门和角色列表
+    const store = useStore()
+    const searchModalFormConfigRef = computed(() => {
+      const departmentItem = searchModalFormConfig.forms.find(
+        (item) => item.field === 'departmentId'
+      )
+      if (departmentItem) {
+        departmentItem.options = store.state.entireDepartment.map((item) => {
+          return { title: item.name, value: item.id }
+        })
+      }
+
+      const roleItem = searchModalFormConfig.forms.find(
+        (item) => item.field === 'roleId'
+      )
+      if (roleItem) {
+        roleItem.options = store.state.entireRole.map((item) => {
+          return { title: item.name, value: item.id }
+        })
+      }
+
+      return searchModalFormConfig
+    })
+
     const { pageModalRef, modalCreateClick, modalEditClick, defaultInfo } =
-      usePageModal()
+      usePageModal(newCallback, editCallback)
 
     return {
       searchFormConfig,
-      searchModalFormConfig,
       propList,
       pageContentRef,
       pageModalRef,
       defaultInfo,
+      searchModalFormConfigRef,
       handleResetOnclick,
       handleSearchClick,
       modalCreateClick,

@@ -27,6 +27,8 @@ import { defineComponent, ref, watch } from 'vue'
 
 import XWLForm from '@/base-ui/form'
 
+import { useStore } from '@/store'
+
 export default defineComponent({
   name: 'page-modal',
   components: {
@@ -40,6 +42,10 @@ export default defineComponent({
     defaultInfo: {
       type: Object,
       default: () => ({})
+    },
+    pageName: {
+      type: String,
+      require: true
     }
   },
   setup(props) {
@@ -60,8 +66,25 @@ export default defineComponent({
       centerDialogVisible.value = false
     }
     // Dialog 对话框上的确认按钮
+    const store = useStore()
     const handleDialogClickConfirm = () => {
       centerDialogVisible.value = false
+      if (Object.keys(props.defaultInfo).length) {
+        // 编辑
+        console.log('编辑用户')
+        store.dispatch('systemModule/editPageDataAction', {
+          pageName: props.pageName,
+          editData: { ...formData.value },
+          id: props.defaultInfo.id
+        })
+      } else {
+        // 新建
+        console.log('新建用户')
+        store.dispatch('systemModule/createPageDataAction', {
+          pageName: props.pageName,
+          newData: { ...formData.value }
+        })
+      }
     }
 
     return {

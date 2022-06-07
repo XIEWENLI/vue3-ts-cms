@@ -2,7 +2,13 @@ import type { Module } from 'vuex'
 import type { ISystemState } from './type'
 import type { IRootState } from '@/store/type'
 
-import { getPageListData, deletePageData } from '@/service/main/system/system'
+import {
+  getPageListData,
+  deletePageData,
+  createPageData,
+  editPageData
+} from '@/service/main/system/system'
+
 import { firstCapitalize } from '@/utils/first-capitalize'
 
 const systemModule: Module<ISystemState, IRootState> = {
@@ -84,9 +90,46 @@ const systemModule: Module<ISystemState, IRootState> = {
       }/${id}`
 
       // 2.调用删除网络请求,user id小于10不允许删除
-      await deletePageData(pageUrl)
+      const res = await deletePageData(pageUrl)
+      console.log(res)
 
       // 3.重新请求最新的数据
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+
+    async createPageDataAction({ dispatch }, payload: any) {
+      // 1.创建数据的请求
+      const { pageName, newData } = payload
+      const pageUrl = `/${pageName === 'user' ? pageName + 's' : pageName}`
+      const res = await createPageData(pageUrl, newData)
+      console.log(res)
+
+      // 2.请求最新的数据
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+
+    async editPageDataAction({ dispatch }, payload: any) {
+      // 1.编辑数据的请求
+      const { pageName, editData, id } = payload
+      const pageUrl = `/${
+        pageName === 'user' ? pageName + 's' : pageName
+      }/${id}`
+      const res = await editPageData(pageUrl, editData)
+      console.log(res)
+
+      // 2.请求最新的数据
       dispatch('getPageListAction', {
         pageName,
         queryInfo: {

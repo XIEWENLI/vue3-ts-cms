@@ -1,7 +1,9 @@
 import { ref } from 'vue'
 import PageModal from '@/components/page-modal'
 
-export function usePageModal() {
+type CallbackFn = () => void
+
+export function usePageModal(newCb?: CallbackFn, editCb?: CallbackFn) {
   const pageModalRef = ref<InstanceType<typeof PageModal>>()
   const defaultInfo = ref<any>({})
 
@@ -9,10 +11,12 @@ export function usePageModal() {
   const modalCreateClick = () => {
     defaultInfo.value = {}
     if (pageModalRef.value) pageModalRef.value.centerDialogVisible = true
+    newCb && newCb()
   }
   const modalEditClick = (item: any) => {
     defaultInfo.value = { ...item }
     if (pageModalRef.value) pageModalRef.value.centerDialogVisible = true
+    editCb && editCb()
   }
   return { pageModalRef, modalCreateClick, modalEditClick, defaultInfo }
 }
