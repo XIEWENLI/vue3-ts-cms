@@ -22,7 +22,8 @@
       :searchModalFormConfig="searchModalFormConfigRef"
       :defaultInfo="defaultInfo"
       pageName="user"
-    ></page-modal>
+    >
+    </page-modal>
   </div>
 </template>
 

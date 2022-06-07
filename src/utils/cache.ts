@@ -1,3 +1,4 @@
+// localstorage存储
 class LocalCache {
   setCache(key: string, value: any) {
     window.localStorage.setItem(key, JSON.stringify(value))
