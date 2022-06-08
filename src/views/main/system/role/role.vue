@@ -78,7 +78,6 @@ export default defineComponent({
     // 编辑权限时回显
     const elTreeRef = ref<InstanceType<typeof ElTree>>()
     const editCallback = (item: any) => {
-      console.log(item)
       const leafKeys = menuMapLeafKeys(item.menuList)
       nextTick(() => {
         console.log(elTreeRef.value)

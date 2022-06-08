@@ -76,21 +76,23 @@ export default defineComponent({
     // 动态添加部门和角色列表
     const store = useStore()
     const searchModalFormConfigRef = computed(() => {
+      // 部门
       const departmentItem = searchModalFormConfig.forms.find(
         (item) => item.field === 'departmentId'
       )
       if (departmentItem) {
         departmentItem.options = store.state.entireDepartment.map((item) => {
-          return { title: item.name, value: item.id }
+          return { title: item.name, value: item.id, label: item.name }
         })
       }
 
+      // 角色
       const roleItem = searchModalFormConfig.forms.find(
         (item) => item.field === 'roleId'
       )
       if (roleItem) {
         roleItem.options = store.state.entireRole.map((item) => {
-          return { title: item.name, value: item.id }
+          return { title: item.name, value: item.id, label: item.name }
         })
       }
 

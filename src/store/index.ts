@@ -3,8 +3,8 @@ import { createStore, Store, useStore as useVuxStore } from 'vuex'
 import { IRootState, IStoreType } from './type'
 
 import loginModule from './login/login'
-
 import systemModule from './main/system/system'
+import dashboard from './main/analysis/dashboard'
 
 import { getPageListData } from '@/service/main/system/system'
 
@@ -53,7 +53,8 @@ const store = createStore<IRootState>({
   },
   modules: {
     loginModule,
-    systemModule
+    systemModule,
+    dashboard
   }
 })
 
