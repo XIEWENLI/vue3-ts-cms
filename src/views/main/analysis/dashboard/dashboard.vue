@@ -53,7 +53,8 @@ export default defineComponent({
     PieEcharts,
     RoseEcharts,
     LineEcharts,
-    BarEcharts
+    BarEcharts,
+    MapEcharts
   },
   setup() {
     const store = useStore()
