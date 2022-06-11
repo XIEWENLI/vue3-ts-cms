@@ -98,6 +98,7 @@ export default defineComponent({
     // 刷新当前路由不变
     const activePath = route.path
     const menu = pathToMenu(userMenus.value, activePath)
+
     //选中的menu选项
     const defaultActive = ref(menu.id + '')
 

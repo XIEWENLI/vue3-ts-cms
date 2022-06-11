@@ -2,7 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 import localCache from '@/utils/cache'
-import { fistRoute } from '@/utils/map-menu'
+
+// import { fistRoute } from '@/utils/map-menu'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -41,7 +42,9 @@ router.beforeEach((to) => {
 
   // 一开始显示界面
   if (to.path === '/main') {
-    return fistRoute.url
+    // 该页面未开发
+    // return fistRoute.url
+    return '/main/system/user'
   }
 })
 
